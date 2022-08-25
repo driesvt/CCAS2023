@@ -1,0 +1,50 @@
+To install the template - from this folder:
+
+dotnet new --install .\
+
+Should get the below message:
+
+Success: D:\Data\Code\VSprod\Template.CCAS installed the following templates:
+Template Name              Short Name  Language  Tags
+-------------------------  ----------  --------  ----------------------------------
+CA Blazor Server Solution  ca-bs-sln   [C#]      Web/SPA/ASP.NET/Clean Architecture
+
+================================================================================================
+================================================================================================
+
+To use template:
+
+From inside the folder in which you want to create the new solution:
+
+dotnet new ca-bs-sln
+
+================================================================================================
+================================================================================================
+
+To uninstall the template  - from this folder:
+
+dotnet new --uninstall .\
+
+
+================================================================================================
+================================================================================================
+
+Database Migrations
+
+Make sure migrations tool is installed
+
+dotnet tool install --global dotnet-ef
+
+To use dotnet-ef for your migrations first ensure that "UseInMemoryDatabase" is disabled. Then, add the following flags to your command (values assume you are executing from repository root)
+
+--project src/Infrastructure (optional if in this folder)
+--startup-project src/BlazorServer
+--output-dir Persistence/Migrations
+
+For example, to add a new migration from the root folder:
+
+dotnet ef migrations add "<migration name>" --project src\Application --startup-project src\BlazorServer --output-dir Common\Persistence\Migrations
+
+To use Powershell script:
+
+.\migration.ps1 -name <migration name>

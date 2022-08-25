@@ -1,0 +1,73 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Companies.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="CompanyVM" ID="CompaniesGrid" AllowSorting="true" AllowFiltering="true" AllowPaging="true" Toolbar="Toolbaritems">
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="CompanyVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(CompaniesGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var company = (context as CompanyVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Company Name</label>
+                    <SfTextBox ID="Id" @bind-Value="@(company.Name)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.Name)" />
+                </div>				
+                <div class="mb-3">
+                    <label for="Website" class="form-label">Company Website</label>
+                    <SfTextBox ID="Website" @bind-Value="@(company.Website)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.Website)" />
+                </div>				
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Company Email</label>
+                    <SfTextBox ID="Email" @bind-Value="@(company.Email)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.Email)" />
+                </div>				
+                <div class="mb-3">
+                    <label for="ContactNumber" class="form-label">Contact Number</label>
+                    <SfTextBox ID="ContactNumber" @bind-Value="@(company.ContactNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.ContactNumber)" />
+                </div>				
+                <div class="mb-3">
+                    <label for="PhysicalAddress" class="form-label">Physical Address</label>
+                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(company.PhysicalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.PhysicalAddress)" />
+                </div>				
+                <div class="mb-3">
+                    <label for="PostalAddress" class="form-label">Postal Address</label>
+                    <SfTextBox ID="PostalAddress" @bind-Value="@(company.PostalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => company.PostalAddress)" />
+                </div>				
+                
+
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(CompanyVM.Id) HeaderText="Id" IsPrimaryKey="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(CompanyVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(CompanyVM.Website) HeaderText="Website" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(CompanyVM.Email) HeaderText="Email" Width="150"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-dialog {
+        min-width: 500px;
+    }
+</style>

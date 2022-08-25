@@ -1,0 +1,18 @@
+﻿@attribute [AllowAnonymous]
+@inject Application.Common.Interfaces.ICurrentUserService CurrentUserService
+
+@page "/"
+
+<AuthorizeView>
+    <Authorized>
+        
+        <HomeDashboard />
+
+    </Authorized>
+    <NotAuthorized>
+        <MudPaper Class="pa-16 ma-2" Outlined="true">
+            <MudText Class="mb-3" Typo="Typo.h3">Welcome! Please log in.</MudText>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Login" Color="Color.Primary" Href="/login">Login</MudButton>
+        </MudPaper>
+    </NotAuthorized>
+</AuthorizeView>

@@ -1,0 +1,66 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.LSuJoins.Queries;
+@using CCAS.Application.Subjects.Queries;
+@using CCAS.Application.Lecturers.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" TValue="LSuJoinVM" EnableVirtualization="true" ID="LSuJoinsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="LSuJoinVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(LSuJoinsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var lSuJoin = (context as LSuJoinVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="LecturerId" class="form-label">Lecturer</label>
+                    <SfDropDownList TValue="int" TItem="LecturerVM" Placeholder="Select a Lecturer" 
+                        @bind-Value="@(lSuJoin.LecturerId)">
+                        <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => lSuJoin.LecturerId)" />
+                </div>
+                <div class="mb-3">
+                    <label for="SubjectId" class="form-label">Subject</label>
+                    <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select an Subject" 
+                        @bind-Value="@(lSuJoin.SubjectId)">
+                        <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => lSuJoin.LecturerId)" />
+                </div>
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(LSuJoinVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridForeignColumn Width="150" TValue="LecturerVM" Field=@nameof(LSuJoinVM.LecturerId) HeaderText="Lecturer Name" ForeignKeyField=@nameof(LecturerVM.Id) ForeignKeyValue="Name">
+            <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+        <GridForeignColumn Width="150" TValue="SubjectVM" Field=@nameof(LSuJoinVM.SubjectId) HeaderText="Subject Name" ForeignKeyField=@nameof(SubjectVM.Id) ForeignKeyValue="Name">
+            <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

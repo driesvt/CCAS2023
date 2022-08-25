@@ -1,0 +1,76 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.AssessmentMarks.Queries;
+@using CCAS.Application.Assessments.Queries;
+@using CCAS.Application.Students.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" TValue="AssessmentMarkVM" EnableVirtualization="true" ID="AssessmentMarksGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="AssessmentMarkVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(AssessmentMarksGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var assessmentMark = (context as AssessmentMarkVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="StudentId" class="form-label">Student</label>
+                    <SfDropDownList TValue="int" TItem="StudentVM" Placeholder="Select a Student" 
+                        @bind-Value="@(assessmentMark.StudentId)">
+                        <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => assessmentMark.StudentId)" />
+                </div>
+                <div class="mb-3">
+                    <label for="AssessmentId" class="form-label">Assessment</label>
+                    <SfDropDownList TValue="int" TItem="AssessmentVM" Placeholder="Select an Assessment" 
+                        @bind-Value="@(assessmentMark.AssessmentId)">
+                        <SfDataManager AdaptorInstance="@typeof(AssessmentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => assessmentMark.AssessmentId)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Mark" class="form-label">Mark</label>
+                    <SfNumericTextBox ID="Mark" @bind-Value="@(assessmentMark.Mark)"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => assessmentMark.Mark)" />
+                </div>
+
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(AssessmentMarkVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridForeignColumn Width="150" TValue="StudentVM" Field=@nameof(AssessmentMarkVM.StudentId) HeaderText="Student Name" ForeignKeyField=@nameof(StudentVM.Id) ForeignKeyValue="Name">
+            <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+        <GridForeignColumn Width="150" TValue="AssessmentVM" Field=@nameof(AssessmentMarkVM.AssessmentId) HeaderText="Assessment Name" ForeignKeyField=@nameof(AssessmentVM.Id) ForeignKeyValue="Name">
+            <SfDataManager AdaptorInstance="@typeof(AssessmentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+        <GridColumn Field=@nameof(AssessmentMarkVM.Mark) Width="150"></GridColumn>
+        <GridForeignColumn Width="150" TValue="AssessmentVM" Field=@nameof(AssessmentMarkVM.AssessmentId) HeaderText="Max Mark" ForeignKeyField=@nameof(AssessmentVM.Id) ForeignKeyValue="MaxMark">
+            <SfDataManager AdaptorInstance="@typeof(AssessmentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

@@ -1,0 +1,10 @@
+﻿@page "/adminarea"
+@attribute [Authorize(policy: "Administrator")]
+
+<MudText Typo="Typo.h4">Super-secret admin area</MudText>
+
+<MudAlert Severity="Severity.Warning">Warning, you are entering an Admin-only area!</MudAlert>
+
+@code {
+
+}
