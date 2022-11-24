@@ -6,8 +6,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="CompanyVM" ID="CompaniesGrid" AllowSorting="true" AllowFiltering="true" AllowPaging="true" Toolbar="Toolbaritems">
     <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="CompanyVM"></GridEvents>

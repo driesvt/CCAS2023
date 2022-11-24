@@ -1,0 +1,37 @@
+﻿<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    @if (currentUserService.IsAuthenticated)
+    {
+        <MudNavLink Href="companies" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Companies</MudNavLink>
+        <MudNavLink Href="SSJoins" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">SSJoins</MudNavLink>
+        <MudNavLink Href="LSuJoins" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">LSuJoins</MudNavLink>
+        <MudNavGroup Title="Subjects" Expanded="false">
+            <MudNavLink Href="subjects">Subjects</MudNavLink>
+            <MudNavLink Href="subjectStudents">Subject Students</MudNavLink>
+            <MudNavLink Href="subjectLecturers">Subject Lecturers</MudNavLink>
+            <MudNavLink Href="subjectAssessments">Subject Assessments</MudNavLink>
+        </MudNavGroup>        
+        <MudNavGroup Title="Lecturers" Expanded="false">
+            <MudNavLink Href="lecturers">Lecturers</MudNavLink>
+            <MudNavLink Href="lecturerSubjects">Lecturer Subjects</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Students" Expanded="false">
+            <MudNavLink Href="studentsTest">Students Test</MudNavLink>
+            <MudNavLink Href="students">Students</MudNavLink>
+            <MudNavLink Href="studentAssessmentMarks">Student Assessments Marks</MudNavLink>
+            <MudNavLink Href="studentSubjects">Student Subjects</MudNavLink>
+        </MudNavGroup>        
+        <MudNavGroup Title="Assessments" Expanded="false">
+            <MudNavLink Href="assessments">Assessments</MudNavLink>
+            <MudNavLink Href="assessmentStudentMarks">Assessments Student Marks</MudNavLink>
+        </MudNavGroup>        
+        @if (IsAdministrator)
+        {
+            <MudNavGroup Title="Admins Only" Expanded="true">
+                <MudNavLink Href="adminarea">Admin Area</MudNavLink>
+                <MudNavLink Href="#">Admin Area 2</MudNavLink>
+            </MudNavGroup>        
+        }
+
+    }
+</MudNavMenu>

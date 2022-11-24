@@ -4,7 +4,7 @@ using MediatR;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Data;
 
-namespace CCAS.BlazorServer.Pages.SharedCustomAdaptors;
+namespace CCAS.BlazorServer.SharedCustomAdaptors;
 
 public class LecturersGridCustomAdaptor : BaseCustomAdapter
 {
@@ -75,6 +75,7 @@ public class LecturersGridCustomAdaptor : BaseCustomAdapter
             Email = data1.Email,
             PhysicalAddress = data1.PhysicalAddress,
             PostalAddress = data1.PostalAddress,
+            Imagesrc = data1.Imagesrc,
             InceptionDate = data1.InceptionDate
         });
 
@@ -96,6 +97,7 @@ public class LecturersGridCustomAdaptor : BaseCustomAdapter
             Email = data1.Email,
             PhysicalAddress = data1.PhysicalAddress,
             PostalAddress = data1.PostalAddress,
+            Imagesrc=data1.Imagesrc,
             InceptionDate = data1.InceptionDate
         });
         return data;

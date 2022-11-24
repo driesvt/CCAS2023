@@ -4,7 +4,7 @@ using MediatR;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Data;
 
-namespace CCAS.BlazorServer.Pages.SharedCustomAdaptors;
+namespace CCAS.BlazorServer.SharedCustomAdaptors;
 
 public class SubjectsGridCustomAdaptor : BaseCustomAdapter
 {
@@ -76,7 +76,8 @@ public class SubjectsGridCustomAdaptor : BaseCustomAdapter
             MethodofDelivery = data1.MethodofDelivery,
             NQFLevel = data1.NQFLevel,
             Year = data1.Year,
-            Semester = data1.Semester
+            Semester = data1.Semester,
+            Imagesrc = data1.Imagesrc,
         });
 
         var insertedSubject = await Mediator.Send(new GetSubjectById() { Id = insertId });
@@ -98,7 +99,8 @@ public class SubjectsGridCustomAdaptor : BaseCustomAdapter
             MethodofDelivery = data1.MethodofDelivery,
             NQFLevel = data1.NQFLevel,
             Year = data1.Year,
-            Semester = data1.Semester
+            Semester = data1.Semester,
+            Imagesrc=data1.Imagesrc,
         });
         return data;
     }

@@ -8,8 +8,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="StudentVM" EnableVirtualization="true" ID="StudentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "_contextmenuitems" Toolbar="_toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -40,8 +38,13 @@
             </div>
         </Template>
     </GridEditSettings>
+    <GridSortSettings>
+        <GridSortColumns>
+            <GridSortColumn Field="Id" Direction="Syncfusion.Blazor.Grids.SortDirection.Ascending"></GridSortColumn>
+        </GridSortColumns>
+    </GridSortSettings>
     <GridColumns>
-        <GridColumn Field=@nameof(StudentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="false" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(StudentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
         <GridColumn Field=@nameof(StudentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
     </GridColumns>
 </SfGrid>
@@ -49,9 +52,9 @@
 <div class='e-statustext'>Showing Subjects for Student: <b>@SelectedStudent</b></div>
 <SfGrid ID="SSJoinsGrid" @ref="Grid2" TValue="SSJoinVM" AllowSorting="true" 
     Query="@(new Query().Where("StudentId", "equal", RowIndex))" 
-    Toolbar="@(new List<string>() { "Search", "Add", "Edit", "Update", "Delete", "Cancel" })">
+    Toolbar="@(new List<string>() { "Search", "Add", "Update", "Delete", "Cancel" })">
     <SfDataManager AdaptorInstance="@typeof(SSJoinsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog">
+    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="false" Mode="EditMode.Dialog">
         <Validator>
             <FluentValidationValidator DisableAssemblyScanning="true" />
             <CustomValidation @ref="_customValidation" />
@@ -59,18 +62,9 @@
         <Template>
             @{
                 var sSJoin = (context as SSJoinVM);
-                if (sSJoin.StudentId==0) sSJoin!.StudentId = RowIndex;
+                if (sSJoin!.StudentId==0) sSJoin!.StudentId = RowIndex;
             }
             <div>
-                <div class="mb-3">
-                    <label for="StudentId" class="form-label">Student</label>
-                    <SfDropDownList TValue="int" TItem="StudentVM" Placeholder="Select a Student"
-                                    @bind-Value="@(sSJoin.StudentId)">
-                        <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                    <ValidationMessage For="@(() => sSJoin.StudentId)" />
-                </div>
                 <div class="mb-3">
                     <label for="SubjectId" class="form-label">Subject</label>
                     <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select an Subject"

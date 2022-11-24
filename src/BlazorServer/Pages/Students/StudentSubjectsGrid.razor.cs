@@ -3,12 +3,11 @@ using CCAS.Application.Subjects.Queries;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Popups;
-using CCAS.BlazorServer.Shared;
-using MudBlazor;
+using BlazorServer.Shared;
 using CCAS.Application.Students.Queries;
 using CCAS.Application.SSJoins.Queries;
 
-namespace CCAS.BlazorServer.Pages.Students;
+namespace BlazorServer.Pages.Students;
 
 public partial class StudentSubjectsGrid : Microsoft.AspNetCore.Components.ComponentBase
 {
@@ -16,16 +15,11 @@ public partial class StudentSubjectsGrid : Microsoft.AspNetCore.Components.Compo
     public SfGrid<StudentVM>? Grid { get; set; }
     public SfGrid<SSJoinVM>? Grid2 { get; set; }
 
-    public StudentVM? SelectedData;
     private List<object> _toolbaritems = new() { "Add", "Edit", "Delete", "Cancel", "Update", "ExcelExport", "PdfExport", "CsvExport" };
     private List<object> _contextmenuitems = new() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Edit", "Delete", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage", "LastPage", "NextPage" };
 
     [Inject]
-    private IDialogService? DialogService { get; set; }
-
-    [Inject]
-    private ISnackbar? snackbar { get; set; }
-
+    private SfDialogService? DialogService { get; set; }
 
     public async Task ActionFailureHandler(FailureEventArgs args)
     {
@@ -39,14 +33,14 @@ public partial class StudentSubjectsGrid : Microsoft.AspNetCore.Components.Compo
                         _customValidation?.DisplayErrors(ex.Errors);
                     else
                     {
-                        snackbar!.Add($"Error: {ex.Message}", Severity.Error);
+                        
                     }
                 }
                 
                 break;
             case DeleteForbiddenException ex:
 
-                await DialogService!.ShowMessageBox("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
+                await DialogService!.AlertAsync("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
                 break;
             default :
 
@@ -54,9 +48,9 @@ public partial class StudentSubjectsGrid : Microsoft.AspNetCore.Components.Compo
                 break;
         }
     }
-
+    public StudentVM? SelectedData;
     public string? SelectedStudent { get; set; }
-    public int RowIndex { get; set; } = 1;
+    public int RowIndex { get; set; } = 2;
     public void RowSelectHandler(RowSelectEventArgs<StudentVM> Args)
     {
         SelectedStudent = Args.Data.Name!;
@@ -67,10 +61,8 @@ public partial class StudentSubjectsGrid : Microsoft.AspNetCore.Components.Compo
     {
         if (Args.RequestType.ToString() == "Delete")
         {
-            bool? result = await DialogService!.ShowMessageBox(
-                "Warning",
-                "Are you sure you want to delete this record?",
-                yesText: "Delete!", cancelText: "Cancel");
+            bool? result = await DialogService.ConfirmAsync(
+                "Are you sure you want to delete this record?", "Warning");
 
             if (result == true)
             {

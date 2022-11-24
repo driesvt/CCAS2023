@@ -17,6 +17,7 @@ public class CreateSubjectCommand : IRequest<int>
     public string? NQFLevel { get; set; }
     public string? Year { get; set; }
     public string? Semester { get; set; }
+    public string? Imagesrc { get; set; }
 }
 
 public class CreateSubjectCommandValidator : AbstractValidator<CreateSubjectCommand>
@@ -61,7 +62,8 @@ public class CreateSubjectCommandHandler : IRequestHandler<CreateSubjectCommand,
             MethodofDelivery = request.MethodofDelivery,
             NQFLevel = request.NQFLevel,
             Year = request.Year,
-            Semester = request.Semester
+            Semester = request.Semester,
+            Imagesrc = request.Imagesrc
         };
 
         context.Subjects.Add(entity);

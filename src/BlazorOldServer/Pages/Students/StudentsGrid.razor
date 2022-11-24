@@ -1,0 +1,79 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Students.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="StudentVM" EnableVirtualization="true" ID="StudentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="StudentVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var student = (context as StudentVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Student Name</label>
+                    <SfTextBox ID="Id" @bind-Value="@(student!.Name)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.Name)" />
+                </div>
+                <div class="mb-3">
+                    <label for="StudentNumber" class="form-label">Student Number</label>
+                    <SfTextBox ID="StudentNumber" @bind-Value="@(student.StudentNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.StudentNumber)" />
+                </div>
+                <div class="mb-3">
+                    <label for="ContactNumber" class="form-label">Contact Number</label>
+                    <SfTextBox ID="ContactNumber" @bind-Value="@(student.ContactNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.ContactNumber)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <SfTextBox ID="Email" @bind-Value="@(student.Email)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.Email)" />
+                </div>
+                <div class="mb-3">
+                    <label for="PhysicalAddress" class="form-label">Physical Address</label>
+                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(student.PhysicalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.PhysicalAddress)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Year" class="form-label">Year</label>
+                    <SfNumericTextBox ID="Year" @bind-Value="@(student.Year)"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => student.Year)" />
+                </div>
+                <div class="mb-3">
+                    <label for="PostalAddress" class="form-label">Postal Address</label>
+                    <SfTextBox ID="PostalAddress" @bind-Value="@(student.PostalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.PostalAddress)" />
+                </div>
+
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(StudentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(StudentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(StudentVM.StudentNumber) Width="150"></GridColumn>
+        <GridColumn Field=@nameof(StudentVM.Email) Width="150"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

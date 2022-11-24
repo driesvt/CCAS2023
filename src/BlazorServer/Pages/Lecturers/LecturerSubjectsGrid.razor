@@ -8,10 +8,8 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
 
-
-<SfGrid @ref="Grid" SelectedRowIndex=RowIndex TValue="LecturerVM" EnableVirtualization="true" ID="LecturersGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="LecturerVM" EnableVirtualization="true" ID="LecturersGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
     <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="LecturerVM"></GridEvents>
     <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
@@ -28,7 +26,7 @@
             <div>
                 <div class="mb-3">
                     <label for="Name" class="form-label">Lecturer Name</label>
-                    <SfTextBox ID="Id" @bind-Value="@(lecturer.Name)"></SfTextBox>
+                    <SfTextBox ID="Id" @bind-Value="@(lecturer!.Name)"></SfTextBox>
                     <ValidationMessage For="@(() => lecturer.Name)" />
                 </div>
                 <div class="mb-3">
@@ -40,8 +38,13 @@
             </div>
         </Template>
     </GridEditSettings>
+    <GridSortSettings>
+        <GridSortColumns>
+            <GridSortColumn Field="Id" Direction="Syncfusion.Blazor.Grids.SortDirection.Ascending"></GridSortColumn>
+        </GridSortColumns>
+    </GridSortSettings>
     <GridColumns>
-        <GridColumn Field=@nameof(LecturerVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="false" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(LecturerVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
         <GridColumn Field=@nameof(LecturerVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
     </GridColumns>
 </SfGrid>
@@ -49,9 +52,9 @@
 <div class='e-statustext'>Showing Subjects for Lecturer: <b>@SelectedLecturer</b></div>
 <SfGrid ID="LSuJoinsGrid" @ref="Grid2" TValue="LSuJoinVM" AllowSorting="true" 
     Query="@(new Query().Where("LecturerId", "equal", RowIndex))" 
-    Toolbar="@(new List<string>() { "Search", "Add", "Edit", "Update", "Delete", "Cancel" })">
+    Toolbar="@(new List<string>() { "Search", "Add", "Update", "Delete", "Cancel" })">
     <SfDataManager AdaptorInstance="@typeof(LSuJoinsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog">
+    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="false" Mode="EditMode.Dialog">
         <Validator>
             <FluentValidationValidator DisableAssemblyScanning="true" />
             <CustomValidation @ref="_customValidation" />
@@ -59,18 +62,9 @@
         <Template>
             @{
                 var lSuJoin = (context as LSuJoinVM);
-                if (lSuJoin.LecturerId == 0) lSuJoin!.LecturerId = RowIndex;
+                if (lSuJoin!.LecturerId == 0) lSuJoin!.LecturerId = RowIndex;
             }
             <div>
-                <div class="mb-3">
-                    <label for="LecturerId" class="form-label">Lecturer</label>
-                    <SfDropDownList TValue="int" TItem="LecturerVM" Placeholder="Select a Lecturer"
-                                    @bind-Value="@(lSuJoin.LecturerId)">
-                        <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                    <ValidationMessage For="@(() => lSuJoin.LecturerId)" />
-                </div>
                 <div class="mb-3">
                     <label for="SubjectId" class="form-label">Subject</label>
                     <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select an Subject"

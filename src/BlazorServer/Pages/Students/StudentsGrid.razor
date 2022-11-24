@@ -6,8 +6,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="StudentVM" EnableVirtualization="true" ID="StudentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -26,7 +24,7 @@
             <div>
                 <div class="mb-3">
                     <label for="Name" class="form-label">Student Name</label>
-                    <SfTextBox ID="Id" @bind-Value="@(student.Name)"></SfTextBox>
+                    <SfTextBox ID="Id" @bind-Value="@(student!.Name)"></SfTextBox>
                     <ValidationMessage For="@(() => student.Name)" />
                 </div>
                 <div class="mb-3">
@@ -48,6 +46,11 @@
                     <label for="PhysicalAddress" class="form-label">Physical Address</label>
                     <SfTextBox ID="PhysicalAddress" @bind-Value="@(student.PhysicalAddress)"></SfTextBox>
                     <ValidationMessage For="@(() => student.PhysicalAddress)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Year" class="form-label">Year</label>
+                    <SfNumericTextBox ID="Year" @bind-Value="@(student.Year)"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => student.Year)" />
                 </div>
                 <div class="mb-3">
                     <label for="PostalAddress" class="form-label">Postal Address</label>

@@ -10,11 +10,15 @@ namespace CCAS.Application.Students.Commands;
 public class CreateStudentCommand : IRequest<int>
 {
     public string? Name { get; set; }
+    //public string? ImageTitle { get; set; }
+    //public byte[]? ImageData { get; set; }
     public string? StudentNumber { get; set; }
     public string? ContactNumber { get; set; }
     public string? Email { get; set; }
     public string? PhysicalAddress { get; set; }
     public string? PostalAddress { get; set; }
+    public int? Year { get; set; }
+    public string? Imagesrc { get; set; }
     public DateTime InceptionDate { get; set; }
 }
 
@@ -54,11 +58,15 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         var entity = new Student
         {
             Name = request.Name,
+            //ImageTitle = request.ImageTitle,
+            //ImageData = request.ImageData,
             StudentNumber = request.StudentNumber,
             ContactNumber = request.ContactNumber,
             Email = request.Email,
             PhysicalAddress = request.PhysicalAddress,
             PostalAddress = request.PostalAddress,
+            Year = request.Year,
+            Imagesrc = request.Imagesrc,
             InceptionDate = request.InceptionDate
         };
 

@@ -1,0 +1,104 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Assessments.Queries;
+@using CCAS.Application.Subjects.Queries;
+@using CCAS.Application.Common.Entities;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="AssessmentVM" EnableVirtualization="true" ID="AssessmentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="AssessmentVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(AssessmentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var assessment = (context as AssessmentVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Assessment Name</label>
+                    <SfTextBox ID="Id" @bind-Value="@(assessment!.Name)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.Name)" />
+                </div>
+                <div class="mb-3">
+                    <label for="SubjectId" class="form-label">Subject</label>
+                    <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select a Subject"
+                                    @bind-Value="@(assessment.SubjectId)">
+                        <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => assessment.SubjectId)" />
+                </div>
+                <div class="mb-3">
+                    <label for="AssessmentCode" class="form-label">Assessment Code</label>
+                    <SfTextBox ID="AssessmentCode" @bind-Value="@(assessment.AssessmentCode)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.AssessmentCode)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Author" class="form-label">Author</label>
+                    <SfTextBox ID="Author" @bind-Value="@(assessment.Author)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.Author)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Moderator" class="form-label">Moderator</label>
+                    <SfTextBox ID="Moderator" @bind-Value="@(assessment.Moderator)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.Moderator)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Details" class="form-label">Details</label>
+                    <SfTextBox ID="Details" @bind-Value="@(assessment.Details)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.Details)" />
+                </div>
+                <div class="mb-3">
+                    <label for="MaxMark" class="form-label">Max Mark</label>
+                    <SfNumericTextBox ID="MaxMark" @bind-Value="@(assessment.MaxMark)"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => assessment.MaxMark)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Weighting" class="form-label">Weighting</label>
+                    <SfTextBox ID="Weighting" @bind-Value="@(assessment.Weighting)"></SfTextBox>
+                    <ValidationMessage For="@(() => assessment.Weighting)" />
+                </div>
+                <div class="mb-3">
+                    <label for="ModerationSubmitDate" class="form-label">Moderation Submit Date</label>
+                    <SfCalendar ID="ModerationSubmitDate" @bind-Value="@(assessment.ModerationSubmitDate)"></SfCalendar>
+                    <ValidationMessage For="@(() => assessment.ModerationSubmitDate)" />
+                </div>
+                <div class="mb-3">
+                    <label for="ModerationCompleteDate" class="form-label">Moderation Complete Date</label>
+                    <SfCalendar ID="ModerationCompleteDate" @bind-Value="@(assessment.ModerationCompleteDate)"></SfCalendar>
+                    <ValidationMessage For="@(() => assessment.ModerationCompleteDate)" />
+                </div>
+                <div class="mb-3">
+                    <label for="DueDate" class="form-label">Due Date</label>
+                    <SfCalendar ID="DueDate" @bind-Value="@(assessment.DueDate)"></SfCalendar>
+                    <ValidationMessage For="@(() => assessment.DueDate)" />
+                </div>
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(AssessmentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(AssessmentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(AssessmentVM.AssessmentCode) Width="150"></GridColumn>
+        <GridColumn Field=@nameof(AssessmentVM.Author) Width="150"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

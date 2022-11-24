@@ -8,8 +8,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" TValue="AssessmentMarkVM" EnableVirtualization="true" ID="AssessmentMarksGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -29,7 +27,7 @@
                 <div class="mb-3">
                     <label for="StudentId" class="form-label">Student</label>
                     <SfDropDownList TValue="int" TItem="StudentVM" Placeholder="Select a Student" 
-                        @bind-Value="@(assessmentMark.StudentId)">
+                        @bind-Value="@(assessmentMark!.StudentId)">
                         <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
                         <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
@@ -49,7 +47,6 @@
                     <SfNumericTextBox ID="Mark" @bind-Value="@(assessmentMark.Mark)"></SfNumericTextBox>
                     <ValidationMessage For="@(() => assessmentMark.Mark)" />
                 </div>
-
             </div>
         </Template>
     </GridEditSettings>

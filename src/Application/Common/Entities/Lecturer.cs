@@ -5,14 +5,18 @@ namespace CCAS.Application.Common.Entities;
 public class Lecturer : AuditableEntity
 {
     public string? Name { get; set; }
+    public string? Username { get; set; }
     public string? LecturerNumber { get; set; }
     public string? ContactNumber { get; set; }
     public string? Email { get; set; }
     public string? PhysicalAddress { get; set; }
     public string? PostalAddress { get; set; }
+    public string? Imagesrc { get; set; }
     public DateTime InceptionDate { get; set; }
 
     public ICollection<LSuJoin>? LSuJoins { get; set; }
+    //public int ImageId { get; set; }
+    //public Image? Image { get; set; }
 
 }
 

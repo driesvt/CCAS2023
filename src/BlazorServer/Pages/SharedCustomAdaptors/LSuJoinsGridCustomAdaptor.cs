@@ -4,7 +4,7 @@ using MediatR;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Data;
 
-namespace CCAS.BlazorServer.Pages.SharedCustomAdaptors;
+namespace CCAS.BlazorServer.SharedCustomAdaptors;
 
 public class LSuJoinsGridCustomAdaptor : BaseCustomAdapter
 {

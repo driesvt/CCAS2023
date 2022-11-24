@@ -186,6 +186,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Imagesrc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("InceptionDate")
                         .HasColumnType("datetime2");
 
@@ -205,6 +208,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -302,6 +308,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Imagesrc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("InceptionDate")
                         .HasColumnType("datetime2");
 
@@ -322,6 +331,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
 
                     b.Property<string>("StudentNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -349,6 +361,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Credits")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Imagesrc")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")

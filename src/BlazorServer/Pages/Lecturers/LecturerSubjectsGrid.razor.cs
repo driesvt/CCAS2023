@@ -3,12 +3,11 @@ using CCAS.Application.Subjects.Queries;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Popups;
-using CCAS.BlazorServer.Shared;
-using MudBlazor;
+using BlazorServer.Shared;
 using CCAS.Application.Lecturers.Queries;
 using CCAS.Application.LSuJoins.Queries;
 
-namespace CCAS.BlazorServer.Pages.Lecturers;
+namespace BlazorServer.Pages.Lecturers;
 
 public partial class LecturerSubjectsGrid : Microsoft.AspNetCore.Components.ComponentBase
 {
@@ -16,16 +15,11 @@ public partial class LecturerSubjectsGrid : Microsoft.AspNetCore.Components.Comp
     public SfGrid<LecturerVM>? Grid { get; set; }
     public SfGrid<LSuJoinVM>? Grid2 { get; set; }
 
-    public LecturerVM? SelectedData;
     private List<Object> Toolbaritems = new List<Object>() { "Add", "Edit", "Delete", "Cancel", "Update", "ExcelExport", "PdfExport", "CsvExport" };
     private List<Object> Contextmenuitems = new List<Object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Edit", "Delete", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage", "LastPage", "NextPage" };
 
     [Inject]
-    private IDialogService? DialogService { get; set; }
-
-    [Inject]
-    private ISnackbar? snackbar { get; set; }
-
+    private SfDialogService? DialogService { get; set; }
 
     public async Task ActionFailureHandler(FailureEventArgs args)
     {
@@ -39,14 +33,14 @@ public partial class LecturerSubjectsGrid : Microsoft.AspNetCore.Components.Comp
                         _customValidation?.DisplayErrors(ex.Errors);
                     else
                     {
-                        snackbar!.Add($"Error: {ex.Message}", Severity.Error);
+                        
                     }
                 }
                 
                 break;
             case DeleteForbiddenException ex:
 
-                await DialogService!.ShowMessageBox("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
+                await DialogService!.AlertAsync("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
                 break;
             default :
 
@@ -54,9 +48,10 @@ public partial class LecturerSubjectsGrid : Microsoft.AspNetCore.Components.Comp
                 break;
         }
     }
-
+    public LecturerVM? SelectedData;
     public string? SelectedLecturer { get; set; }
-    public int RowIndex { get; set; } = 1;
+    public int RowIndex { get; set; } = 2;
+
     public void RowSelectHandler(RowSelectEventArgs<LecturerVM> Args)
     {
         SelectedLecturer = Args.Data.Name!;
@@ -67,10 +62,8 @@ public partial class LecturerSubjectsGrid : Microsoft.AspNetCore.Components.Comp
     {
         if (Args.RequestType.ToString() == "Delete")
         {
-            bool? result = await DialogService!.ShowMessageBox(
-                "Warning",
-                "Are you sure you want to delete this record?",
-                yesText: "Delete!", cancelText: "Cancel");
+            bool? result = await DialogService.ConfirmAsync(
+                "Are you sure you want to delete this record?", "Warning");
 
             if (result == true)
             {

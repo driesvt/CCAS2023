@@ -4,26 +4,20 @@ using CCAS.Application.AssessmentMarks.Queries;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Popups;
-using CCAS.BlazorServer.Shared;
-using MudBlazor;
+using BlazorServer.Shared;
 
-namespace CCAS.BlazorServer.Pages.Assessments;
+namespace BlazorServer.Pages.Assessments;
 
 public partial class AssessmentStudentMarksGrid : Microsoft.AspNetCore.Components.ComponentBase
 {
     private CustomValidation? _customValidation;
     public SfGrid<AssessmentVM>? Grid { get; set; }
     public SfGrid<AssessmentMarkVM>? Grid2 { get; set; }
-    public AssessmentVM? SelectedData;
     private List<Object> Toolbaritems = new List<Object>() { "Add", "Edit", "Delete", "Cancel", "Update", "ExcelExport", "PdfExport", "CsvExport" };
     private List<Object> Contextmenuitems = new List<Object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Edit", "Delete", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage", "LastPage", "NextPage" };
 
     [Inject]
-    private IDialogService? DialogService { get; set; }
-
-    [Inject]
-    private ISnackbar? snackbar { get; set; }
-
+    private SfDialogService? DialogService { get; set; }
 
     public async Task ActionFailureHandler(FailureEventArgs args)
     {
@@ -37,14 +31,13 @@ public partial class AssessmentStudentMarksGrid : Microsoft.AspNetCore.Component
                         _customValidation?.DisplayErrors(ex.Errors);
                     else
                     {
-                        snackbar!.Add($"Error: {ex.Message}", Severity.Error);
                     }
                 }
                 
                 break;
             case DeleteForbiddenException ex:
 
-                await DialogService!.ShowMessageBox("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
+                await DialogService!.AlertAsync("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
                 break;
             default :
 
@@ -52,9 +45,9 @@ public partial class AssessmentStudentMarksGrid : Microsoft.AspNetCore.Component
                 break;
         }
     }
-
+    public AssessmentVM? SelectedData;
     public string? SelectedAssessment { get; set; }
-    public int? RowIndex { get; set; } = 1;
+    public int RowIndex { get; set; } = 2;
     public void RowSelectHandler(RowSelectEventArgs<AssessmentVM> Args)
     {
         SelectedAssessment = Args.Data.Name!;
@@ -67,10 +60,8 @@ public partial class AssessmentStudentMarksGrid : Microsoft.AspNetCore.Component
     {
         if (Args.RequestType.ToString() == "Delete")
         {
-            bool? result = await DialogService!.ShowMessageBox(
-                "Warning",
-                "Are you sure you want to delete this record?",
-                yesText: "Delete!", cancelText: "Cancel");
+            bool? result = await DialogService.ConfirmAsync(
+                "Are you sure you want to delete this record?", "Warning");
 
             if (result == true)
             {

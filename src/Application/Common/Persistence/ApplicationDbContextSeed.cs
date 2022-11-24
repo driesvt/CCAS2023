@@ -56,7 +56,8 @@ public static class ApplicationDbContextSeed
             MethodofDelivery = "Full-time contact",
             NQFLevel = "5",
             Year = "1",
-            Semester = "1"
+            Semester = "1",
+            Imagesrc = "Images/Uploads/1.png",
         };
         var MTHM111 = new Subject
         {
@@ -67,7 +68,8 @@ public static class ApplicationDbContextSeed
             MethodofDelivery = "Full-time contact",
             NQFLevel = "5",
             Year = "1",
-            Semester = "1"
+            Semester = "1",
+            Imagesrc = "Images/Uploads/2.png",
         };
         var PHSM111 = new Subject
         {
@@ -78,37 +80,44 @@ public static class ApplicationDbContextSeed
             MethodofDelivery = "Full-time contact",
             NQFLevel = "5",
             Year = "1",
-            Semester = "1"
+            Semester = "1",
+            Imagesrc = "Images/Uploads/3.png",
         };
 
         var andries = new Lecturer
         {
             Name = "Andries van Tonder",
             LecturerNumber = "L001",
+            Username = "andriesvt",
             Email = "andriesvt@cedar.ac.za",
             ContactNumber = "0828278542",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box 141, Silverstream Farm, Kranskop, 3268",
+            Imagesrc = "Images/Uploads/1.png",
             InceptionDate = new DateTime(2008, 03, 01)
         };
         var giel = new Lecturer
         {
             Name = "Giel Schoombee",
             LecturerNumber = "L002",
+            Username = "giels",
             Email = "giels@cedar.ac.za",
             ContactNumber = "0842002505",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box ???, Silverstream Farm, Kranskop, 3268",
+            Imagesrc = "Images/Uploads/2.png",
             InceptionDate = new DateTime(2010, 02, 01)
         };
         var jan = new Lecturer
         {
             Name = "Jan Pienaar",
             LecturerNumber = "L003",
+            Username = "janp",
             Email = "janp@cedar.ac.za",
             ContactNumber = "0833744347",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box ???, Silverstream Farm, Kranskop, 3268",
+            Imagesrc = "Images/Uploads/3.png",
             InceptionDate = new DateTime(2005, 02, 01)
         };
         context.Add(jan);
@@ -121,6 +130,8 @@ public static class ApplicationDbContextSeed
             ContactNumber = "072 202 0720",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box ???, Silverstream Farm, Kranskop, 3268",
+            Year = 2022,
+            Imagesrc = "Images/Uploads/1.png",
             InceptionDate = new DateTime(2022, 02, 01)
         };
         var naledi = new Student
@@ -131,6 +142,8 @@ public static class ApplicationDbContextSeed
             ContactNumber = "076 246 5567",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box ???, Silverstream Farm, Kranskop, 3268",
+            Year = 2022,
+            Imagesrc = "Images/Uploads/2.png",
             InceptionDate = new DateTime(2022, 02, 01)
         };
         var jennifer = new Student
@@ -141,6 +154,8 @@ public static class ApplicationDbContextSeed
             ContactNumber = "078 940 6338",
             PhysicalAddress = "KwaSizabantu Mission, Silverstream Farm, Kranskop, 3268",
             PostalAddress = "PO Box ???, Silverstream Farm, Kranskop, 3268",
+            Year = 2021,
+            Imagesrc = "Images/Uploads/3.png",
             InceptionDate = new DateTime(2021, 02, 01)
         };
         context.Add(jennifer);

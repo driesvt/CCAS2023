@@ -8,10 +8,8 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
 
-
-<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="SubjectVM" EnableVirtualization="true" ID="SubjectsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="SubjectVM" ID="SubjectsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
     <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="SubjectVM"></GridEvents>
     <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
@@ -70,8 +68,13 @@
             </div>
         </Template>
     </GridEditSettings>
+    <GridSortSettings>
+        <GridSortColumns>
+            <GridSortColumn Field="Id" Direction="Syncfusion.Blazor.Grids.SortDirection.Ascending"></GridSortColumn>
+        </GridSortColumns>
+    </GridSortSettings>
     <GridColumns>
-        <GridColumn Field=@nameof(SubjectVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="false" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(SubjectVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
         <GridColumn Field=@nameof(SubjectVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
         <GridColumn Field=@nameof(SubjectVM.Code) Width="150"></GridColumn>
         <GridColumn Field=@nameof(SubjectVM.Credits) Width="150"></GridColumn>
@@ -81,9 +84,9 @@
 <div class='e-statustext'>Showing Students for Subject: <b>@SelectedSubject</b></div>
 <SfGrid ID="SSJoinsGrid" @ref="Grid2" TValue="SSJoinVM" AllowSorting="true" 
     Query="@(new Query().Where("SubjectId", "equal", RowIndex))" 
-    Toolbar="@(new List<string>() { "Search", "Add", "Edit", "Update", "Delete", "Cancel" })">
+    Toolbar="@(new List<string>() { "Search", "Add", "Update", "Delete", "Cancel" })">
     <SfDataManager AdaptorInstance="@typeof(SSJoinsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog">
+    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="false" Mode="EditMode.Dialog">
         <Validator>
             <FluentValidationValidator DisableAssemblyScanning="true" />
 			<CustomValidation @ref="_customValidation" />
@@ -91,7 +94,7 @@
         <Template>
             @{
                 var sSJoin = (context as SSJoinVM);
-                if (sSJoin.SubjectId==0) sSJoin!.SubjectId = RowIndex;
+                if (sSJoin!.SubjectId==0) sSJoin!.SubjectId = RowIndex;
             }
             <div>
                 <div class="mb-3">
@@ -102,15 +105,6 @@
                         <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => sSJoin.StudentId)" />
-                </div>
-                <div class="mb-3">
-                    <label for="SubjectId" class="form-label">Subject</label>
-                    <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select an Subject"
-                        @bind-Value="@(sSJoin.SubjectId)">
-                        <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                    <ValidationMessage For="@(() => sSJoin.SubjectId)" />
                 </div>
             </div>
         </Template>

@@ -1,0 +1,186 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Students.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="StudentVM" EnableVirtualization="true" ID="StudentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
+                <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="StudentVM"></GridEvents>
+                <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                <GridPageSettings PageSize="10"></GridPageSettings>
+                <GridTemplates>
+                    <DetailTemplate>
+                        @{
+                            var student = (context as StudentVM);
+                        }
+                        <div style="padding:20px">
+                            <SfTab>
+                                <TabItems>
+                                    <TabItem>
+                                        <ChildContent>
+                                            <TabHeader Text="Details"></TabHeader>
+                                        </ChildContent>
+                                        <ContentTemplate>
+                                            <div style="display:inline-flex">
+                                                <div style="float:left;padding:45px;padding-top:70px"><img class="photo" src="@UriHelper.ToAbsoluteUri($"images/data-grid/{student.Id}.png")" alt="@student.Id" /></div>
+                                                <div style="padding-top:42px">
+                                                    <div style="padding-bottom:10px;padding-left:10px;">
+                                                        <span style="font-size:large;font-weight: bold">@student.Name</span>
+                                                    </div>
+                                                    <div style="padding-top:10px;">
+                                                        <table class="table">
+                                                            <tr>
+                                                                <th>Country </th>
+                                                                <td>@student.PhysicalAddress</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Postal Code </th>
+                                                                <td>@student.PostalAddress</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Mail </th>
+                                                                <td>@student.Email</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ContentTemplate>
+                                    </TabItem>
+                                    <TabItem>
+                                        <ChildContent>
+                                            <TabHeader Text="More Details"></TabHeader>
+                                        </ChildContent>
+                                        <ContentTemplate>
+                                            <div style="display:inline-flex">
+                                                <div style="float:left;padding:45px;padding-top:70px"><img class="photo" src="@UriHelper.ToAbsoluteUri($"images/data-grid/{student.Id}.png")" alt="@student.Id" /></div>
+                                                <div style="padding-top:42px">
+                                                    <div style="padding-bottom:10px;padding-left:10px;">
+                                                        <span style="font-size:large;font-weight: bold">@student.Name</span>
+                                                    </div>
+                                                    <div style="padding-top:10px;">
+                                                        <table class="table">
+                                                            <tr>
+                                                                <th>Contact Number</th>
+                                                                <td>@student.ContactNumber</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Year</th>
+                                                                <td>@student.Year</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Mail </th>
+                                                                <td>@student.Email</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ContentTemplate>
+                                    </TabItem>
+                                    <TabItem>
+                                        <ChildContent>
+                                            <TabHeader Text="Subjects"></TabHeader>
+                                        </ChildContent>
+                                        <ContentTemplate>
+
+                                        </ContentTemplate>
+
+                                    </TabItem>
+                                    <TabItem>
+                                        <ChildContent>
+                                            <TabHeader Text="AssessmentMarks"></TabHeader>
+                                        </ChildContent>
+                                        <ContentTemplate>
+
+                                        </ContentTemplate>
+
+                                    </TabItem>
+                                </TabItems>
+                            </SfTab>
+
+                        </div>
+                    </DetailTemplate>
+                </GridTemplates>
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                    <Validator>
+                        <FluentValidationValidator DisableAssemblyScanning="true" />
+                        <CustomValidation @ref="_customValidation" />
+                    </Validator>
+                    <HeaderTemplate>
+                        @{
+                            var student = (context as StudentVM);
+                            <span>@student!.Name</span>
+                        }
+                    </HeaderTemplate>
+                    <Template>
+                        @{
+                            var student = (context as StudentVM);
+                        }
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="Id" @bind-Value="@(student!.Name)" FloatLabelType="FloatLabelType.Always" Placeholder="Student Name"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.Name)" />*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="StudentNumber" @bind-Value="@(student.StudentNumber)" FloatLabelType="FloatLabelType.Always" Placeholder="Student Number"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.StudentNumber)" />*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="ContactNumber" @bind-Value="@(student.ContactNumber)" FloatLabelType="FloatLabelType.Always" Placeholder="Contact Number"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.ContactNumber)" />*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="Email" @bind-Value="@(student.Email)" FloatLabelType="FloatLabelType.Always" Placeholder="Email"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.Email)" />*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(student.PhysicalAddress)" FloatLabelType="FloatLabelType.Always" Placeholder="Physical Address"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.PhysicalAddress)" />*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <SfNumericTextBox ID="Year" @bind-Value="@(student.Year)" FloatLabelType="FloatLabelType.Always" Placeholder="Year"></SfNumericTextBox>
+                                    @*<ValidationMessage For="@(() => student.Year)" />*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <SfTextBox ID="PostalAddress" @bind-Value="@(student.PostalAddress)" FloatLabelType="FloatLabelType.Always" Placeholder="Postal Address"></SfTextBox>
+                                    @*<ValidationMessage For="@(() => student.PostalAddress)" />*@
+                                </div>
+                            </div>
+                        </div>
+                    </Template>
+                </GridEditSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(StudentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+                    <GridColumn Field=@nameof(StudentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(StudentVM.StudentNumber) Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(StudentVM.Email) Width="150"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+
+<style>
+    .image img {
+        height: 55px;
+        width: 55px;
+        border-radius: 50px;
+        box-shadow: inset 0 0 1px #e0e0e0, inset 0 0 14px rgba(0, 0, 0, 0.2);
+    }
+</style>

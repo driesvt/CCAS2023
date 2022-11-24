@@ -20,7 +20,9 @@ public class FakeAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
             new Claim(ClaimTypes.Email, "joe@test.test"),
             new Claim(ClaimTypes.GivenName, "Joe"),
             new Claim(ClaimTypes.Surname, "Blogs"),
-            new Claim("http://schemas.xmlsoap.org/claims/Group", "aql-staff")
+            new Claim("http://schemas.xmlsoap.org/claims/Group", "aql-staff"),
+            new Claim("http://schemas.xmlsoap.org/claims/Group", "cia-staff"),
+            new Claim("http://schemas.xmlsoap.org/claims/Group", "cia-svisor"),
         };
         var identity = new ClaimsIdentity(claims, "Fake");
         var principal = new ClaimsPrincipal(identity);

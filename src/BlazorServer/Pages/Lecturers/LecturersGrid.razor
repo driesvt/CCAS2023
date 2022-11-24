@@ -6,69 +6,119 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
 
-
-<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="LecturerVM" EnableVirtualization="true" ID="LecturersGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
-    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
-    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="LecturerVM"></GridEvents>
-    <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridPageSettings PageSize="10"></GridPageSettings>
-    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
-        <Validator>
-            <FluentValidationValidator DisableAssemblyScanning="true" />
-			<CustomValidation @ref="_customValidation" />
-        </Validator>
-        <Template>
-            @{
-                var lecturer = (context as LecturerVM);
-            }
-            <div>
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Lecturer Name</label>
-                    <SfTextBox ID="Id" @bind-Value="@(lecturer.Name)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.Name)" />
-                </div>
-                <div class="mb-3">
-                    <label for="LecturerNumber" class="form-label">Lecturer Number</label>
-                    <SfTextBox ID="LecturerNumber" @bind-Value="@(lecturer.LecturerNumber)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.LecturerNumber)" />
-                </div>
-                <div class="mb-3">
-                    <label for="ContactNumber" class="form-label">Contact Number</label>
-                    <SfTextBox ID="ContactNumber" @bind-Value="@(lecturer.ContactNumber)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.ContactNumber)" />
-                </div>
-                <div class="mb-3">
-                    <label for="Email" class="form-label">Email</label>
-                    <SfTextBox ID="Email" @bind-Value="@(lecturer.Email)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.Email)" />
-                </div>
-                <div class="mb-3">
-                    <label for="PhysicalAddress" class="form-label">Physical Address</label>
-                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(lecturer.PhysicalAddress)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.PhysicalAddress)" />
-                </div>
-                <div class="mb-3">
-                    <label for="PostalAddress" class="form-label">Postal Address</label>
-                    <SfTextBox ID="PostalAddress" @bind-Value="@(lecturer.PostalAddress)"></SfTextBox>
-                    <ValidationMessage For="@(() => lecturer.PostalAddress)" />
-                </div>
-
-            </div>
-        </Template>
-    </GridEditSettings>
-    <GridColumns>
-        <GridColumn Field=@nameof(LecturerVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
-        <GridColumn Field=@nameof(LecturerVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
-        <GridColumn Field=@nameof(LecturerVM.LecturerNumber) Width="150"></GridColumn>
-        <GridColumn Field=@nameof(LecturerVM.Email) Width="150"></GridColumn>
-    </GridColumns>
-</SfGrid>
+<div class="col-md-12 control-section">
+    <div class="container">
+        <div class="row">
+            <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="LecturerVM" EnableVirtualization="true" ID="LecturersGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems="Contextmenuitems" Toolbar="Toolbaritems">
+                <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                <GridEvents OnActionComplete="OnActionComplete" OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin"
+                            RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="LecturerVM"></GridEvents>
+                <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                <GridPageSettings PageSize="10"></GridPageSettings>
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+                    <Validator>
+                        <FluentValidationValidator DisableAssemblyScanning="true" />
+                        <CustomValidation @ref="_customValidation" />
+                    </Validator>
+                    <Template>
+                        @{
+                            var lecturer = (context as LecturerVM);
+                            var imageUrl = (context as LecturerVM).Imagesrc;
+                        }
+                        <div>
+                            <div class="row">
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="Id" @bind-Value="@(lecturer!.Name)" FloatLabelType="FloatLabelType.Always" Placeholder="Lecturer Name"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.Name)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="LecturerNumber" @bind-Value="@(lecturer.LecturerNumber)" FloatLabelType="FloatLabelType.Always" Placeholder="Lecturer Number"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.LecturerNumber)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="ContactNumber" @bind-Value="@(lecturer.ContactNumber)" FloatLabelType="FloatLabelType.Always" Placeholder="Contact Number"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.ContactNumber)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="Email" @bind-Value="@(lecturer.Email)" FloatLabelType="FloatLabelType.Always" Placeholder="Email"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.Email)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(lecturer.PhysicalAddress)" FloatLabelType="FloatLabelType.Always" Placeholder="Physical Address"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.PhysicalAddress)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <SfTextBox ID="PostalAddress" @bind-Value="@(lecturer.PostalAddress)" FloatLabelType="FloatLabelType.Always" Placeholder="Postal Address"></SfTextBox>
+                                    <ValidationMessage For="@(() => lecturer.PostalAddress)" />
+                                </div>
+                                <div class="gx-2 gy-2 col-md-6">
+                                    <label class="col-form-label">Upload Image:</label>
+                                    <SfUploader AllowedExtensions=".png" AllowMultiple=false>
+                                        <UploaderEvents FileSelected="Selected" ValueChange="OnChange"></UploaderEvents>
+                                    </SfUploader>
+                                    @{
+                                        if (UploadedPath == string.Empty)
+                                        {
+                                            <SfTooltip Target="#img" Content="@imageUrl">
+                                                <img id="img" src=@imageUrl alt="@imageUrl" height="35" />
+                                            </SfTooltip>
+                                        }
+                                        else
+                                        {
+                                            <SfTooltip Target="#img" Content="@UploadedPath">
+                                                <img id="img" src=@UploadedPath alt="@UploadedFile" height="35" />
+                                            </SfTooltip>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </Template>
+                </GridEditSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(LecturerVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+                    <GridColumn Field=@nameof(LecturerVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(LecturerVM.LecturerNumber) Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(LecturerVM.Email) Width="150"></GridColumn>
+                    <GridColumn Field="Imagesrc" HeaderText="Foto" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="200">
+                        <Template>
+                            @{
+                                var lecturer = (context as LecturerVM);
+                                var imageUrl = (context as LecturerVM).Imagesrc;
+                                <div class="image">
+                                    <img src="@imageUrl" />
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
 
 <style>
     .e-grid .e-filtered::before {
-        color: red;               // set the color to filtered icon
-        font-size: medium;        // set the font-size to filtered icon
+        color: red;
+        // set the color to filtered icon font-size: medium;
+        // set the font-size to filtered icon
+    }
+</style>
+<style>
+    .e-dialog {
+        min-width: 500px;
+    }
+
+    #wrapper {
+        text-align: center;
+    }
+</style>
+<style>
+    .image img {
+        height: 55px;
+        width: 55px;
+        border-radius: 50px;
+        /*box-shadow: inset 0 0 1px #e0e0e0, inset 0 0 14px rgba(0, 0, 0, 0.2);*/
     }
 </style>

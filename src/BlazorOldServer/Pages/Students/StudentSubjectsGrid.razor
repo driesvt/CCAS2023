@@ -1,0 +1,97 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Subjects.Queries;
+@using CCAS.Application.Students.Queries;
+@using CCAS.Application.SSJoins.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="StudentVM" EnableVirtualization="true" ID="StudentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "_contextmenuitems" Toolbar="_toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="StudentVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var student = (context as StudentVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Student Name</label>
+                    <SfTextBox ID="Id" @bind-Value="@(student.Name)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.Name)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Code" class="form-label">Student Number</label>
+                    <SfTextBox ID="Code" @bind-Value="@(student.StudentNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => student.StudentNumber)" />
+                </div>
+
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridSortSettings>
+        <GridSortColumns>
+            <GridSortColumn Field="Id" Direction="Syncfusion.Blazor.Grids.SortDirection.Ascending"></GridSortColumn>
+        </GridSortColumns>
+    </GridSortSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(StudentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(StudentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+<div class='e-statustext'>Showing Subjects for Student: <b>@SelectedStudent</b></div>
+<SfGrid ID="SSJoinsGrid" @ref="Grid2" TValue="SSJoinVM" AllowSorting="true" 
+    Query="@(new Query().Where("StudentId", "equal", RowIndex))" 
+    Toolbar="@(new List<string>() { "Search", "Add", "Update", "Delete", "Cancel" })">
+    <SfDataManager AdaptorInstance="@typeof(SSJoinsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="false" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+            <CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var sSJoin = (context as SSJoinVM);
+                if (sSJoin!.StudentId==0) sSJoin!.StudentId = RowIndex;
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="SubjectId" class="form-label">Subject</label>
+                    <SfDropDownList TValue="int" TItem="SubjectVM" Placeholder="Select an Subject"
+                                    @bind-Value="@(sSJoin.SubjectId)">
+                        <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => sSJoin.SubjectId)" />
+                </div>
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(SSJoinVM.Id) HeaderText="ID" IsPrimaryKey="true" Visible="false" IsIdentity="true"></GridColumn>
+        <GridColumn Field=@nameof(SSJoinVM.StudentId) Visible="false"></GridColumn>
+        <GridForeignColumn TValue="SubjectVM" Field=@nameof(SSJoinVM.SubjectId) HeaderText="Subject Name" ForeignKeyField=@nameof(SubjectVM.Id) ForeignKeyValue="Name">
+            <SfDataManager AdaptorInstance="@typeof(SubjectsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        </GridForeignColumn>
+    </GridColumns>
+</SfGrid>
+
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

@@ -3,10 +3,11 @@ using CCAS.Application.Lecturers.Queries;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Popups;
-using CCAS.BlazorServer.Shared;
-using MudBlazor;
+using BlazorServer.Shared;
+using Syncfusion.Blazor.Inputs;
+using Syncfusion.Blazor.Charts.Chart.Internal;
 
-namespace CCAS.BlazorServer.Pages.Lecturers;
+namespace BlazorServer.Pages.Lecturers;
 
 public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBase
 {
@@ -15,15 +16,13 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
     public LecturerVM? SelectedData;
     private List<Object> Toolbaritems = new List<Object>() { "Add", "Edit", "Delete", "Cancel", "Update", "ExcelExport", "PdfExport", "CsvExport" };
     private List<Object> Contextmenuitems = new List<Object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Edit", "Delete", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage", "LastPage", "NextPage" };
+    public string UploadedFile { get; set; }
+    public string UploadedPath { get; set; } = string.Empty;
 
     [Inject]
-    private IDialogService? DialogService { get; set; }
+    private SfDialogService? DialogService { get; set; }
 
-    [Inject]
-    private ISnackbar? snackbar { get; set; }
-
-
-    public async Task ActionFailureHandler(FailureEventArgs args)
+    public async Task ActionFailureHandler(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
         switch(args.Error)
         {
@@ -35,14 +34,14 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
                         _customValidation?.DisplayErrors(ex.Errors);
                     else
                     {
-                        snackbar!.Add($"Error: {ex.Message}", Severity.Error);
+                        
                     }
                 }
                 
                 break;
             case DeleteForbiddenException ex:
 
-                await DialogService!.ShowMessageBox("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
+                await DialogService!.AlertAsync("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
                 break;
             default :
 
@@ -62,10 +61,8 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
     {
         if (Args.RequestType.ToString() == "Delete")
         {
-            bool? result = await DialogService!.ShowMessageBox(
-                "Warning",
-                "Are you sure you want to delete this record?",
-                yesText: "Delete!", cancelText: "Cancel");
+            bool? result = await DialogService.ConfirmAsync(
+                "Are you sure you want to delete this record?", "Warning");
 
             if (result == true)
             {
@@ -76,9 +73,51 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
                 Args.Cancel = true;
             }
         }
+
+        if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save && Args.Action == "Add")
+        {
+            //Args.Data.OrderID = DefaultValue++;    //set the default value while adding.
+            //save the file name / url in grid datasource. You can generate the byte and store here.
+            Args.Data.Imagesrc = "Images/Uploads/" + UploadedFile;
+            UploadedPath = Args.Data.Imagesrc;
+        }
+        else if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save && Args.Action == "Edit")
+        {
+            //save the file name / url in grid datasource. You can generate the byte and store here.
+            Args.Data.Imagesrc = "Images/Uploads/" + UploadedFile;
+            UploadedPath = Args.Data.Imagesrc;
+        }
+
+        Args.PreventRender = false;
     }
 
+    public void OnActionComplete(ActionEventArgs<LecturerVM> args)
+    {
+        if (args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Add) || args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.BeginEdit))
+        {
+            args.PreventRender = false;
+        }
 
+        UploadedPath = string.Empty;
+    }
+
+    private void OnChange(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            var path = @"./wwwroot/Images/Uploads/" + file.FileInfo.Name;
+            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            file.Stream.WriteTo(filestream);
+            filestream.Close();
+            file.Stream.Close();
+        }
+    }
+
+    public void Selected(SelectedEventArgs Args)
+    {
+        UploadedFile = Args.FilesData[0].Name;
+        UploadedPath = @"Images/Uploads/" + UploadedFile;
+    }
     public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "LecturersGrid_pdfexport")  //Id is combination of Grid's ID and itemname

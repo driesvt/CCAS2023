@@ -3,10 +3,9 @@ using CCAS.Application.AssessmentMarks.Queries;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Popups;
-using CCAS.BlazorServer.Shared;
-using MudBlazor;
+using BlazorServer.Shared;
 
-namespace CCAS.BlazorServer.Pages.AssessmentMarks;
+namespace BlazorServer.Pages.AssessmentMarks;
 
 public partial class AssessmentMarksGrid : Microsoft.AspNetCore.Components.ComponentBase
 {
@@ -17,11 +16,7 @@ public partial class AssessmentMarksGrid : Microsoft.AspNetCore.Components.Compo
     private List<Object> Contextmenuitems = new List<Object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Edit", "Delete", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage", "LastPage", "NextPage" };
 
     [Inject]
-    private IDialogService? DialogService { get; set; }
-
-    [Inject]
-    private ISnackbar? snackbar { get; set; }
-
+    private SfDialogService? DialogService { get; set; }
 
     public async Task ActionFailureHandler(FailureEventArgs args)
     {
@@ -35,14 +30,13 @@ public partial class AssessmentMarksGrid : Microsoft.AspNetCore.Components.Compo
                         _customValidation?.DisplayErrors(ex.Errors);
                     else
                     {
-                        snackbar!.Add($"Error: {ex.Message}", Severity.Error);
                     }
                 }
                 
                 break;
             case DeleteForbiddenException ex:
 
-                await DialogService!.ShowMessageBox("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
+                await DialogService!.AlertAsync("Error Deleting Record", $"Error Deleting Record: {ex.Message}");
                 break;
             default :
 
@@ -62,10 +56,8 @@ public partial class AssessmentMarksGrid : Microsoft.AspNetCore.Components.Compo
     {
         if (Args.RequestType.ToString() == "Delete")
         {
-            bool? result = await DialogService!.ShowMessageBox(
-                "Warning",
-                "Are you sure you want to delete this record?",
-                yesText: "Delete!", cancelText: "Cancel");
+            bool? result = await DialogService.ConfirmAsync(
+                "Are you sure you want to delete this record?", "Warning");
 
             if (result == true)
             {

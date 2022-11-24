@@ -1,7 +1,7 @@
 ﻿@page "/lSuJoins"
-@attribute [Authorize]
+@attribute [Authorize(Policy = "Supervisor")]
 
-<MudText Class="mb-4" Typo="Typo.h4">Lecturer Subject Joins</MudText>
+<p class="h4">Lecturer Subject Joins</p>
 
 <LSuJoinsGrid /> 
 

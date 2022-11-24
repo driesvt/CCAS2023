@@ -1,0 +1,74 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using CCAS.Application.Lecturers.Queries;
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Popups
+@using SharedCustomAdaptors
+
+
+<SfGrid @ref="Grid" SelectedRowIndex=1 TValue="LecturerVM" EnableVirtualization="true" ID="LecturersGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
+    <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+    <GridEvents OnActionFailure="ActionFailureHandler" OnActionBegin="OnActionBegin" RowSelected="RowSelectHandler" OnToolbarClick="ToolbarClickHandler" TValue="LecturerVM"></GridEvents>
+    <SfDataManager AdaptorInstance="@typeof(LecturersGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var lecturer = (context as LecturerVM);
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Lecturer Name</label>
+                    <SfTextBox ID="Id" @bind-Value="@(lecturer!.Name)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.Name)" />
+                </div>
+                <div class="mb-3">
+                    <label for="LecturerNumber" class="form-label">Lecturer Number</label>
+                    <SfTextBox ID="LecturerNumber" @bind-Value="@(lecturer.LecturerNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.LecturerNumber)" />
+                </div>
+                <div class="mb-3">
+                    <label for="ContactNumber" class="form-label">Contact Number</label>
+                    <SfTextBox ID="ContactNumber" @bind-Value="@(lecturer.ContactNumber)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.ContactNumber)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <SfTextBox ID="Email" @bind-Value="@(lecturer.Email)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.Email)" />
+                </div>
+                <div class="mb-3">
+                    <label for="PhysicalAddress" class="form-label">Physical Address</label>
+                    <SfTextBox ID="PhysicalAddress" @bind-Value="@(lecturer.PhysicalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.PhysicalAddress)" />
+                </div>
+                <div class="mb-3">
+                    <label for="PostalAddress" class="form-label">Postal Address</label>
+                    <SfTextBox ID="PostalAddress" @bind-Value="@(lecturer.PostalAddress)"></SfTextBox>
+                    <ValidationMessage For="@(() => lecturer.PostalAddress)" />
+                </div>
+
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(LecturerVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(LecturerVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(LecturerVM.LecturerNumber) Width="150"></GridColumn>
+        <GridColumn Field=@nameof(LecturerVM.Email) Width="150"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+<style>
+    .e-grid .e-filtered::before {
+        color: red;               // set the color to filtered icon
+        font-size: medium;        // set the font-size to filtered icon
+    }
+</style>

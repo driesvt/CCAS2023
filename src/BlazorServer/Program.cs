@@ -1,14 +1,19 @@
-﻿using CCAS.BlazorServer.Data;
-using CCAS.BlazorServer.Services;
-using CCAS.Application;
+﻿using CCAS.BlazorServer;
+using BlazorServer.Data;
 using CCAS.Application.Common.Interfaces;
-using CCAS.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor;
-using CCAS.BlazorServer;
-using MudBlazor.Services;
+using CCAS.Application;
 using CCAS.Application.Common.Persistence;
+using CCAS.Infrastructure;
+//using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Syncfusion.Blazor.Popups;
+using Syncfusion.Blazor;
+using CCAS.BlazorServer.Services;
 using CCAS.BlazorServer.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,19 +24,15 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 
-builder.Services.AddMudServices();
-
 builder.Services.AddScoped<IAppDialogService, AppDialogService>();
+builder.Services.AddScoped<IToast, Toast>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSyncfusionBlazor();
-
-//builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; }); 
-// JavaScript isolation is marked as obsolete and disabled by default. You don’t have to make below additional changes. See https://blazor.syncfusion.com/documentation/common/adding-script-references
-
+builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<SfDialogService>();
 
 // Register all Syncfusion Data Adapters
 builder.Services.Scan(scan => scan
@@ -50,7 +51,6 @@ builder.Services.AddApplicationAuthorization();
 
 // Add Logging
 builder.AddCustomLogging(builder.Configuration, stack: "CCAS");
-
 
 var app = builder.Build();
 

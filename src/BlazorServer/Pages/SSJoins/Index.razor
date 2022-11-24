@@ -1,7 +1,7 @@
 ﻿@page "/sSJoins"
-@attribute [Authorize]
+@attribute [Authorize(Policy = "Supervisor")]
 
-<MudText Class="mb-4" Typo="Typo.h4">Student Subject Joins</MudText>
+<p class="h4">Student Subject Joins</p>
 
 <SSJoinsGrid /> 
 

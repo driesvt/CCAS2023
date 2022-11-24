@@ -9,8 +9,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="AssessmentVM" EnableVirtualization="true" ID="AssessmentsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -90,8 +88,13 @@
             </div>
         </Template>
     </GridEditSettings>
+    <GridSortSettings>
+        <GridSortColumns>
+            <GridSortColumn Field="Id" Direction="Syncfusion.Blazor.Grids.SortDirection.Ascending"></GridSortColumn>
+        </GridSortColumns>
+    </GridSortSettings>
     <GridColumns>
-        <GridColumn Field=@nameof(AssessmentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="false" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
+        <GridColumn Field=@nameof(AssessmentVM.Id) HeaderText="Id" IsPrimaryKey="true" Visible="true" TextAlign="@TextAlign.Center" Width="140"></GridColumn>
         <GridColumn Field=@nameof(AssessmentVM.Name) HeaderText="Name" TextAlign="@TextAlign.Left" Width="150"></GridColumn>
         <GridColumn Field=@nameof(AssessmentVM.AssessmentCode) Width="150"></GridColumn>
         <GridColumn Field=@nameof(AssessmentVM.Author) Width="150"></GridColumn>
@@ -103,7 +106,35 @@
         Query="@(new Query().Where("AssessmentId", "equal", RowIndex))" 
     Toolbar="@(new List<string>() { "Search", "Add", "Edit", "Update", "Delete", "Cancel" })">
     <SfDataManager AdaptorInstance="@typeof(AssessmentMarksGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings>
+    <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog">
+        <Validator>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+			<CustomValidation @ref="_customValidation" />
+        </Validator>
+        <Template>
+            @{
+                var assessmentMark = (context as AssessmentMarkVM);
+                if (assessmentMark!.AssessmentId == 0) assessmentMark!.AssessmentId = RowIndex;
+
+            }
+            <div>
+                <div class="mb-3">
+                    <label for="StudentId" class="form-label">Student</label>
+                    <SfDropDownList TValue="int" TItem="StudentVM" Placeholder="Select a Student" 
+                        @bind-Value="@(assessmentMark.StudentId)">
+                        <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                        <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => assessmentMark.StudentId)" />
+                </div>
+                <div class="mb-3">
+                    <label for="Mark" class="form-label">Mark</label>
+                    <SfNumericTextBox ID="Mark" @bind-Value="@(assessmentMark.Mark)"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => assessmentMark.Mark)" />
+                </div>
+            </div>
+        </Template>
+    </GridEditSettings>
     <GridColumns>
         <GridColumn Field=@nameof(AssessmentMarkVM.Id) HeaderText="ID" IsPrimaryKey="true" Visible="false" IsIdentity="true"></GridColumn>
         <GridColumn Field=@nameof(AssessmentMarkVM.AssessmentId) Visible="false"></GridColumn>

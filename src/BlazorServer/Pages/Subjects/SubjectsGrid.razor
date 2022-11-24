@@ -6,8 +6,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" SelectedRowIndex=1 TValue="SubjectVM" EnableVirtualization="true" ID="SubjectsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -26,7 +24,7 @@
             <div>
                 <div class="mb-3">
                     <label for="Name" class="form-label">Subject Name</label>
-                    <SfTextBox ID="Id" @bind-Value="@(subject.Name)"></SfTextBox>
+                    <SfTextBox ID="Id" @bind-Value="@(subject!.Name)"></SfTextBox>
                     <ValidationMessage For="@(() => subject.Name)" />
                 </div>
                 <div class="mb-3">

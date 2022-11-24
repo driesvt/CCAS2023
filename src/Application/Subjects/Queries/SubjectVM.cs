@@ -14,6 +14,7 @@ public class SubjectVM : IMapFrom<Subject>
     public string? NQFLevel { get; set; }
     public string? Year { get; set; }
     public string? Semester { get; set; }
+    public string? Imagesrc { get; set; }
 
     public ICollection<Lecturer>? Lecturers { get; set; }
     public ICollection<Student>? Students { get; set; }

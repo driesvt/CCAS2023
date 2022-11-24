@@ -12,6 +12,7 @@ public class Subject : AuditableEntity
     public string? NQFLevel { get; set; }
     public string? Year { get; set; }
     public string? Semester { get; set; }
+    public string? Imagesrc { get; set; }
 
     public ICollection<SSJoin>? SSJoins { get; set; }
     public ICollection<LSuJoin>? LSuJoins { get; set; }

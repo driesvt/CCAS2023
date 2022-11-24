@@ -1,0 +1,10 @@
+﻿@page "/subjectAssessments"
+@attribute [Authorize(Policy = "Staff")]
+
+<MudText Class="mb-4" Typo="Typo.h4">Subject Assessments</MudText>
+
+<SubjectAssessmentsGrid /> 
+
+@code {
+
+}

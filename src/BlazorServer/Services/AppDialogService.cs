@@ -1,31 +1,31 @@
-﻿using MudBlazor;
+﻿using Syncfusion.Blazor.Notifications;
+using Syncfusion.Blazor.Popups;
 
 namespace CCAS.BlazorServer.Services;
 
 public class AppDialogService : IAppDialogService
 {
-    private readonly IDialogService dialogService;
-    private readonly ISnackbar _snackbar;
+    private readonly SfDialogService dialogService;
+    private readonly IToast toast;
 
-    public AppDialogService(IDialogService dialogService, ISnackbar snackbar)
+    public AppDialogService(SfDialogService dialogService, IToast toast)
     {
         this.dialogService = dialogService;
-        _snackbar = snackbar;
+        this.toast = toast;
     }
 
-    public async Task<bool> Confirm(string message, string title, string okButton = "Yes", string cancelButton = "No")
+    public async Task<bool> Confirm(string message, string title)
     {
-        bool? result = await dialogService.ShowMessageBox(
-            title,
-            message,
-            yesText: okButton, cancelText: cancelButton);
+        bool? result = await dialogService.ConfirmAsync(
+            message, title
+            );
 
         return result == null ? false : (bool)result;
     }
 
     public Task Error(string message, string title)
     {
-        _snackbar.Add(message, Severity.Warning);
+        toast.Add(message, title);
         return Task.CompletedTask;
     }
 }

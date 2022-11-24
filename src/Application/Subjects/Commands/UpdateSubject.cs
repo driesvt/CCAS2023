@@ -20,6 +20,7 @@ public class UpdateSubjectCommand : IRequest, IMapFrom<Subject>
     public string? NQFLevel { get; set; }
     public string? Year { get; set; }
     public string? Semester { get; set; }
+    public string? Imagesrc { get; set; }
 }
 
 public class UpdateSubjectCommandValidator : AbstractValidator<UpdateSubjectCommand>

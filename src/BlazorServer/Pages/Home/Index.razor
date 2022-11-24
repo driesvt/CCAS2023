@@ -1,5 +1,6 @@
 ﻿@attribute [AllowAnonymous]
-@inject Application.Common.Interfaces.ICurrentUserService CurrentUserService
+@inject CCAS.Application.Common.Interfaces.ICurrentUserService CurrentUserService
+@inject NavigationManager NavigationManager
 
 @page "/"
 
@@ -10,9 +11,19 @@
 
     </Authorized>
     <NotAuthorized>
-        <MudPaper Class="pa-16 ma-2" Outlined="true">
-            <MudText Class="mb-3" Typo="Typo.h3">Welcome! Please log in.</MudText>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Login" Color="Color.Primary" Href="/login">Login</MudButton>
-        </MudPaper>
+        <p class="fs-3">Welcome! Please log in.</p>
+        <SfButton @onclick="@((args) => NavigateToLogin())" HtmlAttributes="@ButtonLogin"
+                  IconCss="oi oi-account-login">Login</SfButton>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    private Dictionary<string, object> ButtonLogin = new Dictionary<string, object>()
+    {
+        { "title", "Login"}
+    };
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("login", true);
+    }
+}

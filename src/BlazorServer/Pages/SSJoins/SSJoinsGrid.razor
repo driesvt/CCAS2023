@@ -8,8 +8,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Popups
-@using SharedCustomAdaptors
-
 
 <SfGrid @ref="Grid" TValue="SSJoinVM" EnableVirtualization="true" ID="SSJoinsGrid" AllowSorting="true" AllowFiltering="true" AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true" ContextMenuItems= "Contextmenuitems" Toolbar="Toolbaritems">
     <GridFilterSettings Type ="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
@@ -29,7 +27,7 @@
                 <div class="mb-3">
                     <label for="StudentId" class="form-label">Student</label>
                     <SfDropDownList TValue="int" TItem="StudentVM" Placeholder="Select a Student" 
-                        @bind-Value="@(sSJoin.StudentId)">
+                        @bind-Value="@(sSJoin!.StudentId)">
                         <SfDataManager AdaptorInstance="@typeof(StudentsGridCustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
                         <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>

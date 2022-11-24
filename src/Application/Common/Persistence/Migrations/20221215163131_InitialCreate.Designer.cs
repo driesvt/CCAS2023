@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCAS.Application.Common.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220824183403_InitialCreate")]
+    [Migration("20221215163131_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -188,6 +188,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Imagesrc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("InceptionDate")
                         .HasColumnType("datetime2");
 
@@ -207,6 +210,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -304,6 +310,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Imagesrc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("InceptionDate")
                         .HasColumnType("datetime2");
 
@@ -324,6 +333,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
 
                     b.Property<string>("StudentNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -351,6 +363,9 @@ namespace CCAS.Application.Common.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Credits")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Imagesrc")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")

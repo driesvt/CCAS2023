@@ -10,11 +10,13 @@ namespace CCAS.Application.Lecturers.Commands;
 public class CreateLecturerCommand : IRequest<int>
 {
     public string? Name { get; set; }
+    public string? Username { get; set; }
     public string? LecturerNumber { get; set; }
     public string? ContactNumber { get; set; }
     public string? Email { get; set; }
     public string? PhysicalAddress { get; set; }
     public string? PostalAddress { get; set; }
+    public string? Imagesrc { get; set; }
     public DateTime InceptionDate { get; set; }
 }
 
@@ -54,11 +56,13 @@ public class CreateLecturerCommandHandler : IRequestHandler<CreateLecturerComman
         var entity = new Lecturer
         {
             Name = request.Name,
+            Username = request.Username,
             LecturerNumber = request.LecturerNumber,
             ContactNumber = request.ContactNumber,
             Email = request.Email,
             PhysicalAddress = request.PhysicalAddress,
             PostalAddress = request.PostalAddress,
+            Imagesrc = request.Imagesrc,
             InceptionDate = request.InceptionDate
         };
 

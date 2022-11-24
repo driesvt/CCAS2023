@@ -1,7 +1,7 @@
 ﻿using CCAS.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Components;
 
-namespace CCAS.BlazorServer.Shared;
+namespace CCAS.BlazorOldServer.Shared;
 
 public partial class NavMenu : ComponentBase
 {
