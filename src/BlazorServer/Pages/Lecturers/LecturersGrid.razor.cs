@@ -97,7 +97,6 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
         {
             args.PreventRender = false;
         }
-
         UploadedPath = string.Empty;
     }
 
