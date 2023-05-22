@@ -62,10 +62,10 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
 
-        if (context.Database.IsSqlServer())
-        {
-            context.Database.Migrate();
-        }
+        //if (context.Database.IsSqlServer())
+        //{
+        //    context.Database.Migrate();
+        //}
 
         await ApplicationDbContextSeed.SeedSampleDataAsync(context);
     }
