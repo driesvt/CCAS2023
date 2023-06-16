@@ -27,18 +27,31 @@ public class CreateLecturerCommandValidator : AbstractValidator<CreateLecturerCo
     public CreateLecturerCommandValidator(IApplicationDbContext context)
     {
         RuleFor(v => v.Name).NotEmpty();
+        RuleFor(v => v.LecturerNumber).NotEmpty();
         RuleFor(v => v.Name).MustAsync(LecturerNameMustNotExist).WithMessage("A lecturer with this name already exists");
         RuleFor(v => v.LecturerNumber).MustAsync(LecturerNumberMustNotExist).WithMessage("A lecturer with this number already exists");
+        RuleFor(v => v.Email).EmailAddress();
         this.context = context;
     }
 
-    async Task <bool> LecturerNameMustNotExist(string? lecturerName, CancellationToken cancellationToken)
+    async Task<bool> LecturerNameMustNotExist(string? lecturerName, CancellationToken cancellationToken)
     {
-        return await context.Lecturers.CountAsync(p => p.Name == lecturerName) == 0 ? true : false;
+        if (string.IsNullOrWhiteSpace(lecturerName))
+        {
+            return false; // Name must not be empty or whitespace
+        }
+
+        return !(await context.Lecturers.AnyAsync(p => p.Name == lecturerName, cancellationToken));
     }
+
     async Task<bool> LecturerNumberMustNotExist(string? lecturerNumber, CancellationToken cancellationToken)
     {
-        return await context.Lecturers.CountAsync(p => p.LecturerNumber == lecturerNumber) == 0 ? true : false;
+        if (string.IsNullOrWhiteSpace(lecturerNumber))
+        {
+            return false; // Lecturer number must not be empty or whitespace
+        }
+
+        return !(await context.Lecturers.AnyAsync(p => p.LecturerNumber == lecturerNumber, cancellationToken));
     }
 }
 

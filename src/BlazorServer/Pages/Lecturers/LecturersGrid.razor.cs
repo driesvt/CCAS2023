@@ -77,15 +77,17 @@ public partial class LecturersGrid : Microsoft.AspNetCore.Components.ComponentBa
         if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save && Args.Action == "Add")
         {
             //Args.Data.OrderID = DefaultValue++;    //set the default value while adding.
-            //save the file name / url in grid datasource. You can generate the byte and store here.
+            //save the file name / url in grid datasource.
             Args.Data.Imagesrc = "Images/Uploads/" + UploadedFile;
             UploadedPath = Args.Data.Imagesrc;
         }
         else if (Args.RequestType == Syncfusion.Blazor.Grids.Action.Save && Args.Action == "Edit")
         {
-            //save the file name / url in grid datasource. You can generate the byte and store here.
-            Args.Data.Imagesrc = "Images/Uploads/" + UploadedFile;
-            UploadedPath = Args.Data.Imagesrc;
+            if (UploadedFile?.Length > 0)
+            {
+                Args.Data.Imagesrc = "Images/Uploads/" + UploadedFile;
+            }
+            UploadedPath = Args.Data.Imagesrc ?? string.Empty;
         }
 
         Args.PreventRender = false;

@@ -63,5 +63,3 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
         return entity.Id;
     }
 }
-
-

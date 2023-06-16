@@ -9,6 +9,7 @@ public interface IApplicationDbContext
 {
     DbSet<Company> Companies { get; }
     DbSet<Lecturer> Lecturers { get; }
+    Task<Lecturer> FindLecturerAsync(int id, CancellationToken cancellationToken);
     DbSet<Student> Students { get; }
     DbSet<Subject> Subjects { get; }
     DbSet<Assessment> Assessments { get; }
@@ -38,6 +39,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Company> Companies { get; set; }
     public DbSet<Lecturer> Lecturers { get; set; }
+    public async Task<Lecturer> FindLecturerAsync(int id, CancellationToken cancellationToken)
+    {
+        return await Lecturers.FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+    }
     public DbSet<Student> Students { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Assessment> Assessments { get; set; }

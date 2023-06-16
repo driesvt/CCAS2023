@@ -2,6 +2,7 @@
 using CCAS.Application.Common.Exceptions;
 using CCAS.Application.Common.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace CCAS.Application.Lecturers.Commands;
 
@@ -22,16 +23,11 @@ public class DeleteLecturerCommandHandler : IRequestHandler<DeleteLecturerComman
     public async Task<Unit> Handle(DeleteLecturerCommand request, CancellationToken cancellationToken)
     {
         var entity = await context.Lecturers
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+            .SingleOrDefaultAsync(l => l.Id == request.Id, cancellationToken);
 
         if (entity == null)
         {
             throw new NotFoundException(nameof(Lecturer), request.Id);
-        }
-
-        if (entity.Name == "ABC Trading")
-        {
-            throw new DeleteForbiddenException("Not allowed to delete ABC Trading");
         }
 
         context.Lecturers.Remove(entity);

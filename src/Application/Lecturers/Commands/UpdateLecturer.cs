@@ -30,20 +30,25 @@ public class UpdateLecturerCommandValidator : AbstractValidator<UpdateLecturerCo
     public UpdateLecturerCommandValidator(IApplicationDbContext context)
     {
         RuleFor(x => x.Id).NotEmpty();
-        RuleFor(v => v.Name).NotEmpty();
-        RuleFor(v => v.Name).MustAsync(LecturerNameMustNotExist).WithMessage("A lecturer with this name already exists");
-        RuleFor(v => v.LecturerNumber).MustAsync(LecturerNumberMustNotExist).WithMessage("A lecturer with this number already exists");
+        RuleFor(v => v.Name)
+            .NotEmpty()
+            .MustAsync((command, lecturerName, cancellationToken) => LecturerNameMustNotExist(command.Id, lecturerName, cancellationToken))
+            .WithMessage("A lecturer with this name already exists");
+        RuleFor(v => v.LecturerNumber)
+            .NotEmpty()
+            .MustAsync((command, lecturerNumber, cancellationToken) => LecturerNumberMustNotExist(command.Id, lecturerNumber, cancellationToken))
+            .WithMessage("A lecturer with this number already exists");
 
         this.context = context;
     }
 
-    async Task<bool> LecturerNameMustNotExist(UpdateLecturerCommand command, string? lecturerName, CancellationToken cancellationToken)
+    async Task<bool> LecturerNameMustNotExist(int id, string? lecturerName, CancellationToken cancellationToken)
     {
-        return await context.Lecturers.CountAsync(p => p.Name == lecturerName && p.Id != command.Id) == 0 ? true : false;
+        return await context.Lecturers.CountAsync(p => p.Name == lecturerName && p.Id != id) == 0;
     }
-    async Task<bool> LecturerNumberMustNotExist(UpdateLecturerCommand command, string? lecturerNumber, CancellationToken cancellationToken)
+    async Task<bool> LecturerNumberMustNotExist(int id, string? lecturerNumber, CancellationToken cancellationToken)
     {
-        return await context.Lecturers.CountAsync(p => p.LecturerNumber == lecturerNumber && p.Id != command.Id) == 0 ? true : false;
+        return await context.Lecturers.CountAsync(p => p.LecturerNumber == lecturerNumber && p.Id != id) == 0;
     }
 }
 
@@ -60,8 +65,7 @@ public class UpdateLecturerCommandHandler : IRequestHandler<UpdateLecturerComman
 
     public async Task<Unit> Handle(UpdateLecturerCommand request, CancellationToken cancellationToken)
     {
-        var entity = await context.Lecturers
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+        var entity = await context.FindLecturerAsync(request.Id, cancellationToken);
 
         if (entity == null)
         {
